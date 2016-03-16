@@ -1,3 +1,9 @@
+opennebula (4.14.2.2-1) trusty; urgency=low
+
+  * Include JS and CSS minified files. 
+
+ -- root <root@one-dev.unistra.fr>  Wed, 16 Mar 2016 09:16:39 +0100
+
 opennebula (4.14.2.1-1) unstable; urgency=low
 
   * Initial Unistra OpenNebula package. 
