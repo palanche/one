@@ -1,0 +1,68 @@
+{{! -------------------------------------------------------------------------- }}
+{{! Copyright 2002-2015, OpenNebula Project, OpenNebula Systems                }}
+{{!                                                                            }}
+{{! Licensed under the Apache License, Version 2.0 (the "License"); you may    }}
+{{! not use this file except in compliance with the License. You may obtain    }}
+{{! a copy of the License at                                                   }}
+{{!                                                                            }}
+{{! http://www.apache.org/licenses/LICENSE-2.0                                 }}
+{{!                                                                            }}
+{{! Unless required by applicable law or agreed to in writing, software        }}
+{{! distributed under the License is distributed on an "AS IS" BASIS,          }}
+{{! WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.   }}
+{{! See the License for the specific language governing permissions and        }}
+{{! limitations under the License.                                             }}
+{{! -------------------------------------------------------------------------- }}
+
+<dl class="accordion accordion_list provision_list_flows" data-accordion>
+  <dd class="{{#if opts.active}}active{{/if}} accordion-navigation">
+    <a class="provision_list_flow_accordion right only-not-active provision_back" href="#provision_list_flow_accordion{{accordionId}}">
+      <span class="button small radius"> <i class="fa fa-fw fa-lg fa-th"/><i class="fa fa-fw fa-lg fa-chevron-left"/>
+      </span>
+    </a>
+    <h3 class="subheader">
+      {{!opts.title}}
+      <span class="provision_info_flow_name only-not-active"></span>
+      <span href"#" class="only-active right button radius small secondary provision_flows_list_refresh_button" 
+              {{#unless opts.refresh}}style="display:none"{{/unless}} title=" {{tr "Refresh"}}">
+        <i class="fa fa-fw fa-lg fa-refresh"/></span>
+      <span href"#" class="only-not-active right button small radius secondary provision_refresh_info" 
+              {{#unless opts.refresh}}style="display:none"{{/unless}} title=" {{tr "Refresh"}}">
+        <i class="fa fa-fw fa-lg fa-refresh"/>
+      </span>
+      <span href"#" class="only-active right button radius small secondary provision_flows_list_filter_button" 
+              {{#unless opts.filter}}style="display:none"{{/unless}} title=" {{tr "Filter by User"}}">
+        <i class="fa fa-fw fa-lg fa-filter"/>
+      </span>
+      <span class="only-active right provision_list_flows_filter" style="display: none"></span>
+      <span>
+        <input type="search" class="only-active provision_list_flows_search provision-search-input" placeholder="Search Services"/>
+        <span href"#" class="only-active right button radius small success provision_create_flow_button" 
+              {{#unless opts.create}}style="display:none"{{/unless}}>
+          <i class="fa fa-fw fa-lg fa-plus-square"/>
+        </span>
+      </h3>
+      <div id="provision_list_flow_accordion{{accordionId}}" class="content {{#if opts.active}}active{{/if}}">
+        <div class="">
+          <div class="row">
+            <div class="large-12 large-centered columns">
+              <table class="provision_flows_table">
+                <thead class="hidden">
+                  <tr>
+                    <th>{{tr "ID"}}</th>
+                    <th>{{tr "Name"}}</th>
+                    <th>{{tr "User ID"}}</th>
+                  </tr>
+                </thead>
+                <tbody class="hidden"></tbody>
+              </table>
+              <br></div>
+          </div>
+        </div>
+      </div>
+    </dd>
+    <dd class="accordion-navigation">
+      <a class="provision_show_flow_accordion" href="#provision_show_flow_accordion{{accordionId}}"></a>
+      <div id="provision_show_flow_accordion{{accordionId}}" class="content">{{> tabs/provision-tab/flows/info}}</div>
+    </dd>
+  </dl>
