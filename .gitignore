@@ -20,6 +20,7 @@ src/oca/java/share/doc
 
 src/sunstone/public/.sass-cache
 src/sunstone/public/node_modules
-src/sunstone/public/bower_components
 src/sunstone/public/locale/languages/*.js
 .tx/config
+
+!src/sunstone/public/bower_components/**/*
