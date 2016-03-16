@@ -1,0 +1,11 @@
+{
+  "name": "spice-html5",
+  "_release": "ff42bc7399",
+  "_resolution": {
+    "type": "commit",
+    "commit": "ff42bc7399"
+  },
+  "_source": "git://anongit.freedesktop.org/spice/spice-html5",
+  "_target": "ff42bc7399",
+  "_originalSource": "git://anongit.freedesktop.org/spice/spice-html5"
+}
