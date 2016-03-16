@@ -1,0 +1,137 @@
+#!/usr/bin/make -f
+
+# Handle group assignment: libvirt (Debian) and libvirtd (Ubuntu)
+ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo yes),yes)
+	LIB_VIRT_GROUP = libvirtd
+	DISTRO = Ubuntu
+else
+	LIB_VIRT_GROUP = libvirt
+	DISTRO = Debian
+endif
+
+dpkg_buildflags = DEB_LDFLAGS_MAINT_APPEND="-Wl,--as-needed" dpkg-buildflags
+# injecting CPPFLAGS to CFLAGS and CXXFLAGS
+export CPPFLAGS:=$(shell $(dpkg_buildflags) --get CPPFLAGS)
+export CFLAGS:=$(shell $(dpkg_buildflags) --get CFLAGS) $(CPPFLAGS)
+export CXXFLAGS:=$(shell $(dpkg_buildflags) --get CXXFLAGS) $(CPPFLAGS)
+export LDFLAGS:=$(shell $(dpkg_buildflags) --get LDFLAGS)
+
+%:
+	dh $@ --with javahelper --with bash-completion
+
+override_dh_auto_build:
+	#scons  mysql=yes new_xmlrpc=yes syslog=yes
+	tar xzvf build_opennebula.tar.gz
+	#XMLRPC_DIR="debian/" debian/build_opennebula.sh syslog=yes
+	./build_opennebula.sh syslog=yes
+	(cd src/oca/java/; \
+	ln -s /usr/share/java/xmlrpc-common-3.1.jar lib/; \
+	ln -s /usr/share/java/xmlrpc-client-3.1.jar lib/; \
+	ln -s /usr/share/java/ws-commons-util.jar lib/; \
+	./build.sh -d)
+
+override_dh_auto_install:
+	DESTDIR=dist ./install.sh
+	dh_auto_install
+ifneq (,$(filter opennebula-common, $(shell dh_listpackages)))
+	dh_install -p opennebula-common share/pkgs/${DISTRO}/opennebula.sudoers \
+		/etc/sudoers.d
+	mv debian/opennebula-common/etc/sudoers.d/opennebula.sudoers \
+		debian/opennebula-common/etc/sudoers.d/opennebula
+endif
+ifneq (,$(filter opennebula, $(shell dh_listpackages)))
+	dh_install -p opennebula share/pkgs/${DISTRO}/opennebula /etc/init.d/
+	dh_installinit -p opennebula --name=opennebula --onlyscripts
+	dh_install -p opennebula share/pkgs/logrotate/opennebula /etc/logrotate.d/
+endif
+ifneq (,$(filter opennebula-sunstone, $(shell dh_listpackages)))
+	dh_install -p opennebula-sunstone share/pkgs/${DISTRO}/opennebula-sunstone /etc/init.d/
+	dh_installinit -p opennebula-sunstone --name=opennebula-sunstone --onlyscripts
+
+	dh_install -p opennebula-sunstone share/pkgs/${DISTRO}/opennebula-econe /etc/init.d/
+	dh_installinit -p opennebula-sunstone --name=opennebula-econe --onlyscripts
+
+	dh_install -p opennebula-sunstone share/pkgs/${DISTRO}/opennebula-novnc /etc/init.d/
+endif
+ifneq (,$(filter opennebula-gate, $(shell dh_listpackages)))
+	dh_install -p opennebula-gate share/pkgs/${DISTRO}/opennebula-gate /etc/init.d/
+	dh_installinit -p opennebula-gate --name=opennebula-gate --onlyscripts
+endif
+ifneq (,$(filter opennebula-flow, $(shell dh_listpackages)))
+	dh_install -p opennebula-flow share/pkgs/${DISTRO}/opennebula-flow /etc/init.d/
+	dh_installinit -p opennebula-flow --name=opennebula-flow --onlyscripts
+endif
+
+override_dh_install:
+	dh_install
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf dist/
+	scons --clean .
+	(cd src/oca/java/; \
+	rm lib/xmlrpc-common-3.1.jar; \
+	rm lib/xmlrpc-client-3.1.jar; \
+	rm lib/ws-commons-util.jar; \
+	rm -rf jar/; rm -rf share/doc/; \
+	./build.sh -c)
+	-rm -Rf .scons_temp
+	-rm -Rf share/scons/lex_bison.pyc \
+		src/nebula/.xmlrpc_test/xmlrpc_test.* \
+		src/scheduler/.xmlrpc_test/xmlrpc_test.* \
+		src/scheduler/src/sched/.xmlrpc_test \
+		.xmlrpc_test
+	-rm -Rf debian/opennebula-node.postinst
+
+override_dh_installdeb:
+ifneq (,$(filter opennebula-node, $(shell dh_listpackages)))
+	sed "s/@LIBVIRTGRP@/${LIB_VIRT_GROUP}/g" debian/opennebula-node.postinst.in > debian/opennebula-node.postinst
+endif
+	dh_installdeb
+
+override_dh_fixperms:
+	dh_fixperms
+
+# opennebula
+ifneq (,$(filter opennebula, $(shell dh_listpackages)))
+	find debian/opennebula/etc/one/ -type f -exec chmod 644 {} \;
+	#chmod 755 debian/opennebula/usr/lib/one/remotes/im/common.d/ssh_pubkey.sh
+endif
+
+# ruby-opennebula
+ifneq (,$(filter ruby-opennebula, $(shell dh_listpackages)))
+	find debian/opennebula/etc/one/ -type f -exec chmod 644 {} \;
+endif
+
+# opennebula-tools
+ifneq (,$(filter opennebula-tools, $(shell dh_listpackages)))
+	find debian/opennebula/etc/one/ -type f -exec chmod 644 {} \;
+	#chmod 755 debian/opennebula-tools/usr/lib/one/ruby/cloud/econe/EC2QueryClient.rb
+endif
+
+# opennebula-gate
+ifneq (,$(filter opennebula-gate, $(shell dh_listpackages)))
+	find debian/opennebula/etc/one/ -type f -exec chmod 644 {} \;
+endif
+
+# opennebula-flow
+ifneq (,$(filter opennebula-flow, $(shell dh_listpackages)))
+	find debian/opennebula/etc/one/ -type f -exec chmod 644 {} \;
+endif
+
+# opennebula-common
+ifneq (,$(filter opennebula-common, $(shell dh_listpackages)))
+	chmod 0440 debian/opennebula-common/etc/sudoers.d/opennebula
+endif
+
+# opennebula-sunstone
+ifneq (,$(filter opennebula-sunstone, $(shell dh_listpackages)))
+endif
+
+get-orig-source:
+	uscan --force-download --no-symlink
+
+.PHONY: override_dh_strip
+override_dh_strip:
+	dh_strip --exclude=opennebula
+

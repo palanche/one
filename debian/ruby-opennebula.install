@@ -1,0 +1,20 @@
+dist/etc/one/auth/server_x509_auth.conf  /etc/one/auth/
+dist/etc/one/auth/x509_auth.conf         /etc/one/auth/
+dist/etc/one/auth/ldap_auth.conf         /etc/one/auth/
+
+dist/usr/lib/one/ruby/opennebula.rb /usr/lib/one/ruby/
+
+dist/usr/lib/one/ruby/OpenNebula.rb                     /usr/lib/one/ruby/
+
+dist/usr/lib/one/ruby/cloud/CloudServer.rb                    /usr/lib/one/ruby/cloud/
+dist/usr/lib/one/ruby/cloud/CloudAuth.rb                      /usr/lib/one/ruby/cloud/
+dist/usr/lib/one/ruby/cloud/CloudAuth/OpenNebulaCloudAuth.rb  /usr/lib/one/ruby/cloud/CloudAuth/
+dist/usr/lib/one/ruby/cloud/CloudAuth/X509CloudAuth.rb        /usr/lib/one/ruby/cloud/CloudAuth/
+
+dist/usr/lib/one/ruby/opennebula/*                      /usr/lib/one/ruby/opennebula/
+
+dist/usr/lib/one/sunstone/models/OpenNebulaJSON.rb      /usr/lib/one/ruby/
+dist/usr/lib/one/sunstone/models/OpenNebulaJSON/*       /usr/lib/one/ruby/OpenNebulaJSON/
+
+dist/usr/lib/one/ruby/vendors/*             /usr/lib/one/ruby/vendors/
+dist/usr/lib/one/ruby/vcenter_driver.rb     /usr/lib/one/ruby/

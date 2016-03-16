@@ -1,0 +1,4 @@
+dist/etc/one/onegate-server.conf /etc/one/
+dist/usr/bin/onegate-server /usr/bin/
+dist/usr/lib/one/onegate/* /usr/lib/one/onegate/
+dist/usr/lib/one/ruby/cloud/CloudAuth/OneGateCloudAuth.rb /usr/lib/one/ruby/cloud/CloudAuth/
