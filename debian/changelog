@@ -1,6 +1,5 @@
-opennebula (4.90.5-1) unstable; urgency=low
+opennebula (5.0.0-1) unstable; urgency=low
 
-  * Imported from http://packages.qa.debian.org/o/opennebula.html
+  * Release 5.0.0
 
- -- OpenNebula Team <contact@opennebula.org> Thu, 26 May 2016 11:30:23 +0000
-
+ -- goberle <goberle@unistra.fr>  Sun, 05 Jun 2016 23:30:34 +0200
