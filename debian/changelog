@@ -1,3 +1,94 @@
+opennebula (5.0.1-1) trusty; urgency=medium
+
+  [ Javi Fontan ]
+  * bug #4517: skip disk/snaps that cannot be monitored
+
+  [ Jaime Melis ]
+  * Fix snap copy in ssh drivers
+
+  [ Carlos Martín ]
+  * Feature #2939: Show resource id and name in confirmation dialogs
+  * Bug #4485: Add mention to kerberos in sunstone-server.conf
+  * Bug #4519: Show check_all in market & market app tables
+
+  [ Jaime Melis ]
+  * The aws-sdk versions required for the marketplace and for EC2 hybrid differ
+
+  [ Javi Fontan ]
+  * Fix pre/postmigrate for fs_lvm
+  * Fix bug in fs_lvm/monitor with no disks in vg
+  * Fix bug in fs_lvm/delete
+
+  [ Carlos Martín ]
+  * Bug #4345: Add options to hide labels in menu, and label edit button
+  * Remove table footer border
+
+  [ Tino Vazquez ]
+  * Bug #4508: Added capacity error message in CLI and Sunstone when importing images
+  * Bug #4413: Adjusted algorithm that calculates controllerKey and unitNumber
+
+  [ Carlos Martín ]
+  * Use admin vnc & spice dialogs in cloud view
+  * Feature #4363: update provision dashboard group VMs
+  * Feature #4363: Fix style for template share in cloud view
+
+  [ Javi Fontan ]
+  * Add missing tm for system ds monitoring (qcow2)
+
+  [ Ruben S. Montero ]
+  * Development: So complete error info from the driver
+
+  [ Carlos Martín ]
+  * Feature #4363: Better cloud view service layout in medium and small screens
+
+  [ Javi Fontan ]
+  * Bump version to 4.90.10
+
+  [ Carlos Martín ]
+  * Feature #4363: New favicon
+  * Bug #4515: Force cache flush in topology refresh
+
+  [ Jaime Melis ]
+  * Feature #4462: Fix update in Sunstone
+  * Feature #4513: Show zombie VMs in a table
+  * Fix import VM button
+
+  [ Carlos Martín ]
+  * Bug #4148: Instantiate shows total cost for VMs, services. Including admin view
+  * Feature #4525: Enable VNC by default
+
+  [ Tino Vazquez ]
+  * Take into account folders in datastores for vCenter
+
+  [ Guillaume Oberlé ]
+  * Remove orders attributes when removing boot orders (#99)
+
+  [ Ruben S. Montero ]
+  * Development: Drop CEPH_HOST, CEPH_USER & CEPH_SECRET as REQUIRED_ATTRS for Ceph
+
+  [ Jaime Melis ]
+  * Bump version 5.0.0
+
+  [ Carlos Martín ]
+  * Bug #4529: Fix VM log panel
+  * Bug #4526: Fix VM updateconf
+  * Bug #4527: Force panel onShow after a refresh
+  * Bug #4518: Fix vcenter import formatting
+
+  [ Ruben S. Montero ]
+  * Development: Fix Ceph CDROM
+
+  [ Tino Vazquez ]
+  * Feature #4524: Add Network and SSH context to imported vCenter templates
+  * Add new Azure instance type
+
+  [ goberle ]
+  * Rebuild de l'UI web.
+
+  [ root ]
+
+ -- root <root@one-dev.unistra.fr>  Wed, 08 Jun 2016 20:30:19 +0200
+
 opennebula (5.0.0-1) unstable; urgency=low
 
   * Release 5.0.0
