@@ -66,5 +66,5 @@ require 'opennebula/marketplaceapp_pool'
 module OpenNebula
 
     # OpenNebula version
-    VERSION = '4.90.5'
+    VERSION = '5.0.0'
 end
