@@ -1,3 +1,124 @@
+opennebula (5.0.2-1) trusty; urgency=medium
+
+  [ Ruben S. Montero ]
+  * bug #4533: Fix disk name in suntone boot order widget
+
+  [ Tino Vazquez ]
+  * Remove marketplace from vCenter views
+
+  [ Jaime Melis ]
+  * Feature #4534: Check for updates in Sunstone
+  * Refactor support tab and plugin
+  * Add a proxy support for the Support portal
+
+  [ Ruben S. Montero ]
+  * Bug #4528: Allow to set floating IPs from the command line to VRs
+
+  [ Anton Todorov ]
+  * im/monitor_ds.sh skip broken symlinks
+
+  [ Carlos Martín ]
+  * Bug #4521: Update Java OCA to 5.0
+  * Add DISK_SNAPSHOT_REVERT status to libs
+
+  [ Jaime Melis ]
+  * Refactor the support portal assets
+  * Enable check for updates
+
+  [ Carlos Martín ]
+  * Bug #4541: Fix vcenter layout problems
+
+  [ Ruben S. Montero ]
+  * Revert "Development: Fix Ceph CDROM"
+  * Redo fix for Ceph CDROM
+  * Bug #4547: Do no generate VLAN_ID if not needed.Inherit VLAN_ID in reservations
+
+  [ Jaime Melis ]
+  * Refactor Sunstone Upgrade notification
+  * Define in sunstone-server.rb the Upgrade notifications
+
+  [ Tino Vazquez ]
+  * Allow spaces in resource pool names
+
+  [ Carlos Martín ]
+  * Update translations
+
+  [ Tino Vazquez ]
+  * Bug #4557: Fix attach_disk within template error in vCenter
+
+  [ Carlos Martín ]
+  * Bug #4548: Fix network vn_mad required attributes
+
+  [ Ruben S. Montero ]
+  * bug #4564: Does not resurrect VMs on DISK polling info messages
+
+  [ Carlos Martín ]
+  * Bug #4565: Fix html ids in vcenter import dialogs
+
+  [ Tino Vazquez ]
+  * Adjustment for spaces in resource pool names
+
+  [ Ruben S. Montero ]
+  * bug #4548: Update error message for empty brige
+  * Development: Remove VLAN_ID from template to prevent manual edits when set automatic
+
+  [ Carlos Martín ]
+  * Bug #4547: Add dropdown with automatic vlan options
+
+  [ Javi Fontan ]
+  * bug #4562: fix bug uploading images
+
+  [ Tino Vazquez ]
+  * Bug #4559: Fix only one disk to detach on cancel in vCenter
+
+  [ Javi Fontan ]
+  * bug #4550: error registering iso images in vcenter
+
+  [ Carlos Martín ]
+  * Bug #4566: vcenter adapter and disk type inputs in DS wizard
+
+  [ Tino Vazquez ]
+  * Bug #4550: Add support for vCenter CDROM add
+
+  [ Javi Fontan ]
+  * bug #4550: add .iso extension to cdroms (vcenter)
+
+  [ Carlos Martín ]
+  * Bug #4544: Import dialogs do not check rows by default
+  * Bug #4558: fix vcenter params in vm template update
+  * Update translations
+
+  [ Tino Vazquez ]
+  * Fix ec2 defaults file
+
+  [ Ruben S. Montero ]
+  * bug #4278: Sync volatile disk computations in core & fsck
+
+  [ Javi Fontan ]
+  * Add dependencies for onevcenter in rubygems
+
+  [ Tino Vazquez ]
+  * Avoid fail when no disks in vCenter VM and terminate --hard
+  * Avoid fail when shutdown VM with no attached disks in vCenter
+
+  [ Carlos Martín ]
+  * Set fixed library versions for bower dependencies
+  * Bug #4569: Fix individual info panel in cloud view
+  * Bug #4570: Fix confirm dialog for RoleVM actions
+
+  [ Jaime Melis ]
+  * Fix marketplaceapp download url
+
+  [ Ruben S. Montero ]
+  * bug 4575: Fix Apptemplate generation
+
+  [ goberle ]
+  * Rebuild de l'UI web.
+
+  [ root ]
+
+ -- root <root@one-dev.unistra.fr>  Wed, 15 Jun 2016 21:31:17 +0200
+
 opennebula (5.0.1-1) trusty; urgency=medium
 
   [ Javi Fontan ]
