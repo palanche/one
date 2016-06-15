@@ -28,12 +28,10 @@
       namedQueries = parseStyleToObject(extractedStyles);
 
       for (var key in namedQueries) {
-        if (namedQueries.hasOwnProperty(key)) {
-          self.queries.push({
-            name: key,
-            value: 'only screen and (min-width: ' + namedQueries[key] + ')'
-          });
-        }
+        self.queries.push({
+          name: key,
+          value: 'only screen and (min-width: ' + namedQueries[key] + ')'
+        });
       }
 
       this.current = this._getCurrentSize();
@@ -67,10 +65,8 @@
      */
     get: function (size) {
       for (var i in this.queries) {
-        if (this.queries.hasOwnProperty(i)) {
-          var query = this.queries[i];
-          if (size === query.name) return query.value;
-        }
+        var query = this.queries[i];
+        if (size === query.name) return query.value;
       }
 
       return null;
@@ -111,15 +107,14 @@
       var _this = this;
 
       $(window).on('resize.zf.mediaquery', function () {
-        var newSize = _this._getCurrentSize(),
-            currentSize = _this.current;
+        var newSize = _this._getCurrentSize();
 
-        if (newSize !== currentSize) {
+        if (newSize !== _this.current) {
+          // Broadcast the media query change on the window
+          $(window).trigger('changed.zf.mediaquery', [newSize, _this.current]);
+
           // Change the current media query
           _this.current = newSize;
-
-          // Broadcast the media query change on the window
-          $(window).trigger('changed.zf.mediaquery', [newSize, currentSize]);
         }
       });
     }

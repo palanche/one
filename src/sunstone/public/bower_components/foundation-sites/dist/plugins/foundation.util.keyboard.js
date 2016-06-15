@@ -68,15 +68,15 @@
       fn = functions[command];
       if (fn && typeof fn === 'function') {
         // execute function  if exists
-        var returnValue = fn.apply();
+        fn.apply();
         if (functions.handled || typeof functions.handled === 'function') {
           // execute function when event was handled
-          functions.handled(returnValue);
+          functions.handled.apply();
         }
       } else {
         if (functions.unhandled || typeof functions.unhandled === 'function') {
           // execute function when event was not handled
-          functions.unhandled();
+          functions.unhandled.apply();
         }
       }
     },

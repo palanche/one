@@ -22,7 +22,6 @@ class OffCanvas {
     this.$element = element;
     this.options = $.extend({}, OffCanvas.defaults, this.$element.data(), options);
     this.$lastTrigger = $();
-    this.$triggers = $();
 
     this._init();
     this._events();
@@ -41,7 +40,7 @@ class OffCanvas {
     this.$element.attr('aria-hidden', 'true');
 
     // Find triggers that affect this element and add aria-expanded to them
-    this.$triggers = $(document)
+    $(document)
       .find('[data-open="'+id+'"], [data-close="'+id+'"], [data-toggle="'+id+'"]')
       .attr('aria-expanded', 'false')
       .attr('aria-controls', id);
@@ -179,8 +178,6 @@ class OffCanvas {
       //   _this._stick();
       // }
     });
-
-    this.$triggers.attr('aria-expanded', 'true');
     this.$element.attr('aria-hidden', 'false')
         .trigger('opened.zf.offcanvas');
 
@@ -189,7 +186,7 @@ class OffCanvas {
     }
 
     if (trigger) {
-      this.$lastTrigger = trigger;
+      this.$lastTrigger = trigger.attr('aria-expanded', 'true');
     }
 
     if (this.options.autoFocus) {
@@ -278,7 +275,7 @@ class OffCanvas {
       this.$exiter.removeClass('is-visible');
     }
 
-    this.$triggers.attr('aria-expanded', 'false');
+    this.$lastTrigger.attr('aria-expanded', 'false');
     if (this.options.trapFocus) {
       $('[data-off-canvas-content]').removeAttr('tabindex');
     }

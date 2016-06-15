@@ -53,14 +53,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this.id = this.$element.attr('id');
         this.isActive = false;
         this.cached = { mq: Foundation.MediaQuery.current };
-        this.isMobile = mobileSniff();
+        this.isiOS = iPhoneSniff();
+
+        if (this.isiOS) {
+          this.$element.addClass('is-ios');
+        }
 
         this.$anchor = $('[data-open="' + this.id + '"]').length ? $('[data-open="' + this.id + '"]') : $('[data-toggle="' + this.id + '"]');
-        this.$anchor.attr({
-          'aria-controls': this.id,
-          'aria-haspopup': true,
-          'tabindex': 0
-        });
+
+        if (this.$anchor.length) {
+          var anchorId = this.$anchor[0].id || Foundation.GetYoDigits(6, 'reveal');
+
+          this.$anchor.attr({
+            'aria-controls': this.id,
+            'id': anchorId,
+            'aria-haspopup': true,
+            'tabindex': 0
+          });
+          this.$element.attr({ 'aria-labelledby': anchorId });
+        }
 
         if (this.options.fullScreen || this.$element.hasClass('full')) {
           this.options.fullScreen = true;
@@ -97,7 +108,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: '_makeOverlay',
       value: function _makeOverlay(id) {
-        var $overlay = $('<div></div>').addClass('reveal-overlay').appendTo('body');
+        var $overlay = $('<div></div>').addClass('reveal-overlay').attr({ 'tabindex': -1, 'aria-hidden': true }).appendTo('body');
         return $overlay;
       }
 
@@ -146,18 +157,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: '_events',
       value: function _events() {
-        var _this2 = this;
-
         var _this = this;
 
         this.$element.on({
           'open.zf.trigger': this.open.bind(this),
-          'close.zf.trigger': function (event, $element) {
-            if (event.target === _this.$element[0] || $(event.target).parents('[data-closable]')[0] === $element) {
-              // only close reveal when it's explicitly called
-              return _this2.close.apply(_this2);
-            }
-          },
+          'close.zf.trigger': this.close.bind(this),
           'toggle.zf.trigger': this.toggle.bind(this),
           'resizeme.zf.trigger': function () {
             _this._updatePosition();
@@ -212,7 +216,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: 'open',
       value: function open() {
-        var _this3 = this;
+        var _this2 = this;
 
         if (this.options.deepLink) {
           var hash = '#' + this.id;
@@ -238,11 +242,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         if (this.$overlay) {
           this.$overlay.css({ 'visibility': '' }).hide();
-          if (this.$element.hasClass('fast')) {
-            this.$overlay.addClass('fast');
-          } else if (this.$element.hasClass('slow')) {
-            this.$overlay.addClass('slow');
-          }
         }
 
         if (!this.options.multipleOpened) {
@@ -253,29 +252,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
            */
           this.$element.trigger('closeme.zf.reveal', this.id);
         }
+
         // Motion UI method of reveal
         if (this.options.animationIn) {
-          var _this;
-
-          (function () {
-            var afterAnimationFocus = function () {
-              _this.$element.attr({
-                'aria-hidden': false,
-                'tabindex': -1
-              }).focus();
-              console.log('focus');
-            };
-
-            _this = _this3;
-
-            if (_this3.options.overlay) {
-              Foundation.Motion.animateIn(_this3.$overlay, 'fade-in');
-            }
-            Foundation.Motion.animateIn(_this3.$element, _this3.options.animationIn, function () {
-              _this3.focusableElements = Foundation.Keyboard.findFocusable(_this3.$element);
-              afterAnimationFocus();
-            });
-          })();
+          if (this.options.overlay) {
+            Foundation.Motion.animateIn(this.$overlay, 'fade-in');
+          }
+          Foundation.Motion.animateIn(this.$element, this.options.animationIn, function () {
+            _this2.focusableElements = Foundation.Keyboard.findFocusable(_this2.$element);
+          });
         }
         // jQuery method of reveal
         else {
@@ -297,15 +282,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
          */
         this.$element.trigger('open.zf.reveal');
 
-        if (this.isMobile) {
-          this.originalScrollPos = window.pageYOffset;
-          $('html, body').addClass('is-reveal-open');
+        if (this.isiOS) {
+          var scrollPos = window.pageYOffset;
+          $('html, body').addClass('is-reveal-open').scrollTop(scrollPos);
         } else {
           $('body').addClass('is-reveal-open');
         }
 
+        $('body').addClass('is-reveal-open').attr('aria-hidden', this.options.overlay || this.options.fullScreen ? true : false);
+
         setTimeout(function () {
-          _this3._extraHandlers();
+          _this2._extraHandlers();
         }, 0);
       }
 
@@ -351,22 +338,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               if (_this.$element.find(':focus').is(_this.focusableElements.eq(-1))) {
                 // left modal downwards, setting focus to first element
                 _this.focusableElements.eq(0).focus();
-                return true;
+                e.preventDefault();
               }
               if (_this.focusableElements.length === 0) {
                 // no focusable elements inside the modal at all, prevent tabbing in general
-                return true;
+                e.preventDefault();
               }
             },
             tab_backward: function () {
               if (_this.$element.find(':focus').is(_this.focusableElements.eq(0)) || _this.$element.is(':focus')) {
                 // left modal upwards, setting focus to last element
                 _this.focusableElements.eq(-1).focus();
-                return true;
+                e.preventDefault();
               }
               if (_this.focusableElements.length === 0) {
                 // no focusable elements inside the modal at all, prevent tabbing in general
-                return true;
+                e.preventDefault();
               }
             },
             open: function () {
@@ -384,11 +371,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               if (_this.options.closeOnEsc) {
                 _this.close();
                 _this.$anchor.focus();
-              }
-            },
-            handled: function (preventDefault) {
-              if (preventDefault) {
-                e.preventDefault();
               }
             }
           });
@@ -442,15 +424,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this.$element.off('keydown.zf.reveal');
 
         function finishUp() {
-          if (_this.isMobile) {
+          if (_this.isiOS) {
             $('html, body').removeClass('is-reveal-open');
-            if (_this.originalScrollPos) {
-              $('body').scrollTop(_this.originalScrollPos);
-              _this.originalScrollPos = null;
-            }
           } else {
             $('body').removeClass('is-reveal-open');
           }
+
+          $('body').attr({
+            'aria-hidden': false,
+            'tabindex': ''
+          });
 
           _this.$element.attr('aria-hidden', true);
 
@@ -610,14 +593,5 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   function iPhoneSniff() {
     return (/iP(ad|hone|od).*OS/.test(window.navigator.userAgent)
     );
-  }
-
-  function androidSniff() {
-    return (/Android/.test(window.navigator.userAgent)
-    );
-  }
-
-  function mobileSniff() {
-    return iPhoneSniff() || androidSniff();
   }
 }(jQuery);

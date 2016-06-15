@@ -757,6 +757,7 @@ tabs/support-tab/panels/info.js
 hbs!tabs/support-tab/form-panels/create/wizard
 tabs/support-tab/form-panels/create.js
 tabs/support-tab.js
+tabs/upgrade-top-tab.js
 hbs!sunstone/user_and_zone
 hbs!utils/dialogs/confirm/html
 utils/dialogs/confirm.js
