@@ -22,6 +22,7 @@ define(function(require) {
   var DomDataTable = require('utils/dom-datatable');
   var CustomLayoutDataTable = require('utils/custom-layout-table');
   var Notifier = require('utils/notifier');
+  var UniqueId = require('utils/unique-id');
 
   var TemplateHTML = require('hbs!./networks/html');
   var EmptyTableTemplate = require('hbs!./networks/empty-table');
@@ -74,7 +75,7 @@ define(function(require) {
         "X_VCENTER_HOST": opts.vcenter_host
       },
       success: function(response) {
-        $(".content", context).html("");
+        $(".vcenter_datacenter_list", context).html("");
 
         $.each(response, function(datacenter_name, networks) {
           var content;
@@ -95,9 +96,9 @@ define(function(require) {
                 '</legend>' +
               '</fieldset>';
 
-            $(".content", context).append(content);
+            $(".vcenter_datacenter_list", context).append(content);
           } else {
-            var tableId = "vcenter_network_table_" + datacenter_name;
+            var tableId = "vcenter_network_table_" + UniqueId.id();
             content = 
               '<fieldset>' +
                 '<legend>' +
@@ -107,7 +108,7 @@ define(function(require) {
                     '</li>' +
                     '<li> ' +
                       '<label class="inline">' +
-                        '<input type="checkbox" class="check_all" checked/>' +
+                        '<input type="checkbox" class="check_all"/>' +
                         Locale.tr("Select All") +
                       '</label>' +
                     '</li>' +
@@ -141,7 +142,7 @@ define(function(require) {
                 '</div>';
             '</fieldset>';
 
-            $(".content", context).append(content);
+            $(".vcenter_datacenter_list", context).append(content);
 
             var preDrawCallback = function (settings) {
                 $('#' + tableId).html(EmptyTableTemplate());

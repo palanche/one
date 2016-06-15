@@ -21,6 +21,7 @@ define(function(require) {
   var OpenNebulaError = require('opennebula/error');
   var DomDataTable = require('utils/dom-datatable');
   var Notifier = require('utils/notifier');
+  var UniqueId = require('utils/unique-id');
 
   var TemplateHTML = require('hbs!./images/html');
 
@@ -73,7 +74,7 @@ define(function(require) {
         "X_VCENTER_HOST": opts.vcenter_host
       },
       success: function(response) {
-        $(".content", context).html("");
+        $(".vcenter_datacenter_list", context).html("");
 
         if (response.length == 0) {
           content = 
@@ -92,21 +93,15 @@ define(function(require) {
               '</legend>' +
             '</fieldset>';
 
-          $(".content", context).append(content);
+          $(".vcenter_datacenter_list", context).append(content);
         } else {
-          var tableId = "vcenter_image_table_" + opts.vcenter_datastore;
+          var tableId = "vcenter_image_table_" + UniqueId.id();
           content = 
             '<fieldset>' +
               '<legend>' +
                 '<ul class="menu simple">' +
                   '<li> ' +
                     opts.vcenter_datastore + ' ' + Locale.tr("Datastore") +
-                  '</li>' +
-                  '<li> ' +
-                    '<label class="inline">' +
-                      '<input type="checkbox" class="check_all" checked/>' +
-                      Locale.tr("Select All") +
-                    '</label>' +
                   '</li>' +
                   '<li> ' +
                     '<button class="button small success import_selected">' +
@@ -138,13 +133,13 @@ define(function(require) {
               '</div>';
           '</fieldset>';
 
-          var newdiv = $(content).appendTo($(".content", context));
+          var newdiv = $(content).appendTo($(".vcenter_datacenter_list", context));
           var tbody = $('#' + tableId + ' tbody', context);
 
           $.each(response, function(id, image) {
               var trow = $(
                 '<tr class="vcenter_image">' +
-                  '<td><input type="checkbox" class="check_item" checked/></td>' +
+                  '<td><input type="checkbox" class="check_item"/></td>' +
                   '<td>' + image.name + '</td>' +
                   '<td>' + image.size + ' MB</td>' +
                   '<td><div class="vcenter_image_response"/></td>' +
@@ -157,7 +152,7 @@ define(function(require) {
             });
 
           var imageDataTable = new DomDataTable(
-            'vcenter_image_table_' + opts.vcenter_datastore,
+              tableId,
               {
                 actions: false,
                 info: false,

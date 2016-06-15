@@ -15,21 +15,55 @@
 /* -------------------------------------------------------------------------- */
 
 define(function(require) {
-  var Handlebars = require('hbs/handlebars');
   var Locale = require('utils/locale');
+  var TAB_ID = 'upgrade-top-tab';
 
-  var valOrDefault = function(value, defaultValue, options) {
-    var out;
+  var Tab = {
+    tabId: TAB_ID,
+    title: "",
+    setup: _setup,
+    content: ""
+  }
 
-    if (value == undefined || ($.isPlainObject(value) && $.isEmptyObject(value))){
-        out = defaultValue;
-    } else {
-        out = value;
-    }
+  return Tab;
 
-    return new Handlebars.SafeString(out);
-  };
+  function _setup() {
+    $('#li_upgrade-top-tab > a').on("click", function(e){
+      var redirect_port = config['upgrade']['redirect_port'];
+      var upgrade_url = config['upgrade']['url'];
 
-  Handlebars.registerHelper('valOrDefault', valOrDefault);
-  return valOrDefault;
-})
+      if (redirect_port) {
+        window.location = document.URL.replace(/(https?:\/\/)([^:\/]+).*$/,"$1$2:"+redirect_port)
+      } else {
+        window.location = upgrade_url
+      }
+
+      return false;
+    });
+
+    $.ajax({
+      url: '/version',
+      type: "GET",
+      dataType: "json",
+      success: function(response) {
+        var version = response["version"];
+
+        // remote_version could be null if the server cannot reach the url
+        var remote_version = response["remote_version"];
+
+        var tab_title;
+
+        if (remote_version && (version < remote_version)) {
+          tab_title = config['upgrade']['upgrade'];
+        } else {
+          tab_title = config['upgrade']['no_upgrade'];
+        }
+
+        $("li[id$='upgrade-top-tab'] > a").html(tab_title);
+      },
+      error: function(response) {
+        return null;
+      }
+    });
+  }
+});

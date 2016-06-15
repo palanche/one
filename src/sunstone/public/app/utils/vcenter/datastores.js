@@ -21,6 +21,7 @@ define(function(require) {
   var OpenNebulaError = require('opennebula/error');
   var DomDataTable = require('utils/dom-datatable');
   var Notifier = require('utils/notifier');
+  var UniqueId = require('utils/unique-id');
 
   var TemplateHTML = require('hbs!./datastores/html');
 
@@ -75,7 +76,7 @@ define(function(require) {
         "X_VCENTER_HOST": opts.vcenter_host
       },
       success: function(response){
-        $(".content", context).html("");
+        $(".vcenter_datacenter_list", context).html("");
 
         $.each(response, function(datacenter_name, datastores){
           var content;
@@ -96,9 +97,9 @@ define(function(require) {
                 '</legend>' +
               '</fieldset>';
 
-            $(".content", context).append(content);
+            $(".vcenter_datacenter_list", context).append(content);
           } else {
-            var tableId = "vcenter_network_table_" + datacenter_name;
+            var tableId = "vcenter_datastore_table" + UniqueId.id();
             content = 
               '<fieldset>' +
                 '<legend>' +
@@ -120,7 +121,7 @@ define(function(require) {
                 '</legend>' +
                 '<div class="row">' +
                   '<div class="large-12 columns">' +
-                    '<table class="dataTable vcenter_datastore_table" id="vcenter_datastore_table_' + datacenter_name + '">' +
+                    '<table class="dataTable vcenter_datastore_table" id="' + tableId + '">' +
                       '<thead>' +
                         '<th class="check">' +
                           '<input type="checkbox" class="check_all"/>' +
@@ -136,13 +137,13 @@ define(function(require) {
                 '</div>';
             '</fieldset>';
 
-            var newdiv = $(content).appendTo($(".content", context));
-            var tbody = $('#vcenter_datastore_table_' + datacenter_name + ' tbody', context);
+            var newdiv = $(content).appendTo($(".vcenter_datacenter_list", context));
+            var tbody = $('#' + tableId + ' tbody', context);
 
             $.each(datastores, function(id, datastore){
               var trow = $(
                 '<tr class="vcenter_datastore">' +
-                  '<td><input type="checkbox" class="check_item" checked/></td>' +
+                  '<td><input type="checkbox" class="check_item"/></td>' +
                   '<td>' + datastore.name + '</td>' +
                   '<td>' + datastore.cluster + '</td>' +
                   '<td><div class="vcenter_datastore_response"/></td>' +
@@ -154,7 +155,7 @@ define(function(require) {
             });
 
             var tmplDataTable = new DomDataTable(
-              'vcenter_datastore_table_' + datacenter_name,
+              tableId,
               {
                 actions: false,
                 info: false,
