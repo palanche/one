@@ -61,7 +61,7 @@ public class TemplatePool extends Pool implements Iterable<Template>
      * <li>{@link Pool#MINE}: Connected user's Templates</li>
      * <li>{@link Pool#MINE_GROUP}: Connected user's Templates, and the ones in
      * his group</li>
-     * <li>>= 0: UID User's Templates</li>
+     * <li>&gt;= 0: UID User's Templates</li>
      * </ul>
      */
     public TemplatePool(Client client, int filter)
@@ -89,7 +89,7 @@ public class TemplatePool extends Pool implements Iterable<Template>
      * <li>{@link Pool#MINE}: Connected user's Templates</li>
      * <li>{@link Pool#MINE_GROUP}: Connected user's Templates, and the ones in
      * his group</li>
-     * <li>>= 0: UID User's Templates</li>
+     * <li>&gt;= 0: UID User's Templates</li>
      * </ul>
      * @return If successful the message contains the string
      * with the information returned by OpenNebula.
@@ -147,7 +147,7 @@ public class TemplatePool extends Pool implements Iterable<Template>
      * <li>{@link Pool#MINE}: Connected user's Templates</li>
      * <li>{@link Pool#MINE_GROUP}: Connected user's Templates, and the ones in
      * his group</li>
-     * <li>>= 0: UID User's Templates</li>
+     * <li>&gt;= 0: UID User's Templates</li>
      * </ul>
      * @param startId Lowest Id to retrieve
      * @param endId Biggest Id to retrieve
@@ -219,7 +219,7 @@ public class TemplatePool extends Pool implements Iterable<Template>
      * <li>{@link Pool#MINE}: Connected user's Templates</li>
      * <li>{@link Pool#MINE_GROUP}: Connected user's Templates, and the ones in
      * his group</li>
-     * <li>>= 0: UID User's Templates</li>
+     * <li>&gt;= 0: UID User's Templates</li>
      * </ul>
      * @param startId Lowest Id to retrieve
      * @param endId Biggest Id to retrieve

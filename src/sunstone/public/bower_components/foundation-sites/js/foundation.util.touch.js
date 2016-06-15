@@ -101,7 +101,7 @@
         ;
 
       if('MouseEvent' in window && typeof window.MouseEvent === 'function') {
-        simulatedEvent = new window.MouseEvent(type, {
+        simulatedEvent = window.MouseEvent(type, {
           'bubbles': true,
           'cancelable': true,
           'screenX': first.screenX,

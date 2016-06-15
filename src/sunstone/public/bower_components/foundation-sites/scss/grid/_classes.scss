@@ -116,8 +116,7 @@
     .#{$-zf-size}-#{$collapse} {
       > .#{$column} { @include grid-col-collapse; }
 
-      .#{$row},
-      .#{$expanded}.#{$row} &.#{$row} {
+      .#{$row} {
         margin-left: 0;
         margin-right: 0;
       }

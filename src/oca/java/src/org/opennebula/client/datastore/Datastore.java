@@ -73,7 +73,8 @@ public class Datastore extends PoolElement
      *
      * @param client XML-RPC Client.
      * @param description A string containing the template of the datastore.
-     * @param clusterId Id of the cluster
+     * @param clusterId Id of the cluster. If it is -1, this datastore
+     * won't be added to any cluster.
      * @return If successful the message contains the associated
      * id generated for this Datastore.
      */

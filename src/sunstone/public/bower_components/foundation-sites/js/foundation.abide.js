@@ -29,7 +29,7 @@ class Abide {
    * @private
    */
   _init() {
-    this.$inputs = this.$element.find('input, textarea, select');
+    this.$inputs = this.$element.find('input, textarea, select').not('[data-abide-ignore]');
 
     this._events();
   }
@@ -83,10 +83,6 @@ class Abide {
     var isGood = true;
 
     switch ($el[0].type) {
-      case 'checkbox':
-        isGood = $el[0].checked;
-        break;
-
       case 'select':
       case 'select-one':
       case 'select-multiple':
@@ -242,11 +238,6 @@ class Abide {
         validator = $el.attr('data-validator'),
         equalTo = true;
 
-    // don't validate ignored inputs or hidden inputs
-    if ($el.is('[data-abide-ignore]') || $el.is('[type="hidden"]')) {
-      return true;
-    }
-
     switch ($el[0].type) {
       case 'radio':
         validated = this.validateRadio($el.attr('name'));
@@ -362,24 +353,19 @@ class Abide {
     // If at least one radio in the group has the `required` attribute, the group is considered required
     // Per W3C spec, all radio buttons in a group should have `required`, but we're being nice
     var $group = this.$element.find(`:radio[name="${groupName}"]`);
-    var valid = false, required = false;
+    var valid = false;
 
-    // For the group to be required, at least one radio needs to be required
+    // .attr() returns undefined if no elements in $group have the attribute "required"
+    if ($group.attr('required') === undefined) {
+      valid = true;
+    }
+
+    // For the group to be valid, at least one radio needs to be checked
     $group.each((i, e) => {
-      if ($(e).attr('required')) {
-        required = true;
+      if ($(e).prop('checked')) {
+        valid = true;
       }
     });
-    if(!required) valid=true;
-
-    if (!valid) {
-      // For the group to be valid, at least one radio needs to be checked
-      $group.each((i, e) => {
-        if ($(e).prop('checked')) {
-          valid = true;
-        }
-      });
-    };
 
     return valid;
   }
@@ -412,9 +398,7 @@ class Abide {
     $(`.${opts.inputErrorClass}`, $form).not('small').removeClass(opts.inputErrorClass);
     $(`${opts.formErrorSelector}.${opts.formErrorClass}`).removeClass(opts.formErrorClass);
     $form.find('[data-abide-error]').css('display', 'none');
-    $(':input', $form).not(':button, :submit, :reset, :hidden, :radio, :checkbox, [data-abide-ignore]').val('').removeAttr('data-invalid');
-    $(':input:radio', $form).not('[data-abide-ignore]').prop('checked',false).removeAttr('data-invalid');
-    $(':input:checkbox', $form).not('[data-abide-ignore]').prop('checked',false).removeAttr('data-invalid');
+    $(':input', $form).not(':button, :submit, :reset, :hidden, [data-abide-ignore]').val('').removeAttr('data-invalid');
     /**
      * Fires when the form has been reset.
      * @event Abide#formreset

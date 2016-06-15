@@ -46,7 +46,6 @@ $input-prefix-padding: 1rem !default;
 
   %input-group-child {
     margin: 0;
-    white-space: nowrap;
 
     @if not $global-flexbox {
       display: table-cell;

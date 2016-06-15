@@ -29,7 +29,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       this.$element = element;
       this.options = $.extend({}, OffCanvas.defaults, this.$element.data(), options);
       this.$lastTrigger = $();
-      this.$triggers = $();
 
       this._init();
       this._events();
@@ -52,7 +51,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this.$element.attr('aria-hidden', 'true');
 
         // Find triggers that affect this element and add aria-expanded to them
-        this.$triggers = $(document).find('[data-open="' + id + '"], [data-close="' + id + '"], [data-toggle="' + id + '"]').attr('aria-expanded', 'false').attr('aria-controls', id);
+        $(document).find('[data-open="' + id + '"], [data-close="' + id + '"], [data-toggle="' + id + '"]').attr('aria-expanded', 'false').attr('aria-controls', id);
 
         // Add a close trigger over the body if necessary
         if (this.options.closeOnClick) {
@@ -202,8 +201,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           //   _this._stick();
           // }
         });
-
-        this.$triggers.attr('aria-expanded', 'true');
         this.$element.attr('aria-hidden', 'false').trigger('opened.zf.offcanvas');
 
         if (this.options.closeOnClick) {
@@ -211,7 +208,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
 
         if (trigger) {
-          this.$lastTrigger = trigger;
+          this.$lastTrigger = trigger.attr('aria-expanded', 'true');
         }
 
         if (this.options.autoFocus) {
@@ -308,7 +305,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           this.$exiter.removeClass('is-visible');
         }
 
-        this.$triggers.attr('aria-expanded', 'false');
+        this.$lastTrigger.attr('aria-expanded', 'false');
         if (this.options.trapFocus) {
           $('[data-off-canvas-content]').removeAttr('tabindex');
         }

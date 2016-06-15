@@ -33,12 +33,10 @@ var MediaQuery = {
     namedQueries = parseStyleToObject(extractedStyles);
 
     for (var key in namedQueries) {
-      if(namedQueries.hasOwnProperty(key)) {
-        self.queries.push({
-          name: key,
-          value: `only screen and (min-width: ${namedQueries[key]})`
-        });
-      }
+      self.queries.push({
+        name: key,
+        value: `only screen and (min-width: ${namedQueries[key]})`
+      });
     }
 
     this.current = this._getCurrentSize();
@@ -70,10 +68,8 @@ var MediaQuery = {
    */
   get(size) {
     for (var i in this.queries) {
-      if(this.queries.hasOwnProperty(i)) {
-        var query = this.queries[i];
-        if (size === query.name) return query.value;
-      }
+      var query = this.queries[i];
+      if (size === query.name) return query.value;
     }
 
     return null;
@@ -110,14 +106,14 @@ var MediaQuery = {
    */
   _watcher() {
     $(window).on('resize.zf.mediaquery', () => {
-      var newSize = this._getCurrentSize(), currentSize = this.current;
+      var newSize = this._getCurrentSize();
 
-      if (newSize !== currentSize) {
+      if (newSize !== this.current) {
+        // Broadcast the media query change on the window
+        $(window).trigger('changed.zf.mediaquery', [newSize, this.current]);
+
         // Change the current media query
         this.current = newSize;
-
-        // Broadcast the media query change on the window
-        $(window).trigger('changed.zf.mediaquery', [newSize, currentSize]);
       }
     });
   }

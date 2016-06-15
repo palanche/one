@@ -23,6 +23,7 @@ define(function(require) {
   var CustomLayoutDataTable = require('utils/custom-layout-table');
   var UserInputs = require('utils/user-inputs');
   var Notifier = require('utils/notifier');
+  var UniqueId = require('utils/unique-id');
 
   var TemplateHTML = require('hbs!./templates/html');
   var EmptyTableTemplate = require('hbs!./templates/empty-table');
@@ -75,7 +76,7 @@ define(function(require) {
         "X_VCENTER_HOST": opts.vcenter_host
       },
       success: function(response){
-        $(".content", context).html("");
+        $(".vcenter_datacenter_list", context).html("");
 
         $.each(response, function(datacenter_name, templates){
           var content;
@@ -96,9 +97,9 @@ define(function(require) {
                 '</legend>' +
               '</fieldset>';
 
-            $(".content", context).append(content);
+            $(".vcenter_datacenter_list", context).append(content);
           } else {
-            var tableId = "vcenter_template_table_" + datacenter_name;
+            var tableId = "vcenter_template_table_" + UniqueId.id();
             content = 
               '<fieldset>' +
                 '<legend>' +
@@ -108,7 +109,7 @@ define(function(require) {
                     '</li>' +
                     '<li> ' +
                       '<label class="inline">' +
-                        '<input type="checkbox" class="check_all" checked/>' +
+                        '<input type="checkbox" class="check_all"/>' +
                         Locale.tr("Select All") +
                       '</label>' +
                     '</li>' +
@@ -142,7 +143,7 @@ define(function(require) {
                 '</div>';
               '</fieldset>';
 
-            $(".content", context).append(content);
+            $(".vcenter_datacenter_list", context).append(content);
 
             var preDrawCallback = function (settings) {
                 $('#' + tableId).html(EmptyTableTemplate());

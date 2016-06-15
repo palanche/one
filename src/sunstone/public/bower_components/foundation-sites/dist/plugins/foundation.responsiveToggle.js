@@ -65,9 +65,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       value: function _events() {
         var _this = this;
 
-        this._updateMqHandler = this._update.bind(this);
-
-        $(window).on('changed.zf.mediaquery', this._updateMqHandler);
+        $(window).on('changed.zf.mediaquery', this._update.bind(this));
 
         this.$toggler.on('click.zf.responsiveToggle', this.toggleMenu.bind(this));
       }
@@ -116,12 +114,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: 'destroy',
       value: function destroy() {
-        this.$element.off('.zf.responsiveToggle');
-        this.$toggler.off('.zf.responsiveToggle');
-
-        $(window).off('changed.zf.mediaquery', this._updateMqHandler);
-
-        Foundation.unregisterPlugin(this);
+        //TODO this...
       }
     }]);
 

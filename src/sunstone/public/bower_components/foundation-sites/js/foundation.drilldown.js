@@ -66,19 +66,19 @@ class Drilldown {
     //   this._menuLinkEvents();
     // }
     this.$submenuAnchors.each(function(){
-      var $link = $(this);
-      var $sub = $link.parent();
+      var $sub = $(this);
+      var $link = $sub.find('a:first');
       if(_this.options.parentLink){
         $link.clone().prependTo($sub.children('[data-submenu]')).wrap('<li class="is-submenu-parent-item is-submenu-item is-drilldown-submenu-item" role="menu-item"></li>');
       }
       $link.data('savedHref', $link.attr('href')).removeAttr('href');
-      $link.children('[data-submenu]')
+      $sub.children('[data-submenu]')
           .attr({
             'aria-hidden': true,
             'tabindex': 0,
             'role': 'menu'
           });
-      _this._events($link);
+      _this._events($sub);
     });
     this.$submenus.each(function(){
       var $menu = $(this),
@@ -89,8 +89,8 @@ class Drilldown {
       _this._back($menu);
     });
     if(!this.$element.parent().hasClass('is-drilldown')){
-      this.$wrapper = $(this.options.wrapper).addClass('is-drilldown');
-      this.$wrapper = this.$element.wrap(this.$wrapper).parent().css(this._getMaxDims());
+      this.$wrapper = $(this.options.wrapper).addClass('is-drilldown').css(this._getMaxDims());
+      this.$element.wrap(this.$wrapper);
     }
   }
 
@@ -116,9 +116,8 @@ class Drilldown {
       _this._show($elem.parent('li'));
 
       if(_this.options.closeOnClick){
-        var $body = $('body');
+        var $body = $('body').not(_this.$wrapper);
         $body.off('.zf.drilldown').on('click.zf.drilldown', function(e){
-          if (e.target === _this.$element[0] || $.contains(_this.$element[0], e.target)) { return; }
           e.preventDefault();
           _this._hideAll();
           $body.off('.zf.drilldown');
@@ -133,9 +132,9 @@ class Drilldown {
    */
   _keyboardEvents() {
     var _this = this;
-
+    
     this.$menuItems.add(this.$element.find('.js-drilldown-back > a')).on('keydown.zf.drilldown', function(e){
-
+      
       var $element = $(this),
           $elements = $element.parent('li').parent('ul').children('li').children('a'),
           $prevElement,
@@ -156,7 +155,7 @@ class Drilldown {
             $element.parent('li').one(Foundation.transitionend($element), function(){
               $element.parent('li').find('ul li a').filter(_this.$menuItems).first().focus();
             });
-            return true;
+            e.preventDefault();
           }
         },
         previous: function() {
@@ -166,15 +165,15 @@ class Drilldown {
               $element.parent('li').parent('ul').parent('li').children('a').first().focus();
             }, 1);
           });
-          return true;
+          e.preventDefault();
         },
         up: function() {
           $prevElement.focus();
-          return true;
+          e.preventDefault();
         },
         down: function() {
           $nextElement.focus();
-          return true;
+          e.preventDefault();
         },
         close: function() {
           _this._back();
@@ -187,19 +186,17 @@ class Drilldown {
               setTimeout(function() {
                 $element.parent('li').parent('ul').parent('li').children('a').first().focus();
               }, 1);
-            });
+            });            
+            e.preventDefault();
           } else if ($element.is(_this.$submenuAnchors)) {
             _this._show($element.parent('li'));
             $element.parent('li').one(Foundation.transitionend($element), function(){
               $element.parent('li').find('ul li a').filter(_this.$menuItems).first().focus();
-            });
-          }
-          return true;
-        },
-        handled: function(preventDefault) {
-          if (preventDefault) {
+            });            
             e.preventDefault();
           }
+        },
+        handled: function() {
           e.stopImmediatePropagation();
         }
       });
@@ -265,10 +262,7 @@ class Drilldown {
    */
   _show($elem) {
     $elem.children('[data-submenu]').addClass('is-active');
-    /**
-     * Fires when the submenu has opened.
-     * @event Drilldown#open
-     */
+
     this.$element.trigger('open.zf.drilldown', [$elem]);
   };
 
@@ -286,7 +280,7 @@ class Drilldown {
            $elem.blur();
          });
     /**
-     * Fires when the submenu has closed.
+     * Fires when the submenu is has closed.
      * @event Drilldown#hide
      */
     $elem.trigger('hide.zf.drilldown', [$elem]);
@@ -321,10 +315,8 @@ class Drilldown {
     this.$element.unwrap()
                  .find('.js-drilldown-back, .is-submenu-parent-item').remove()
                  .end().find('.is-active, .is-closing, .is-drilldown-submenu').removeClass('is-active is-closing is-drilldown-submenu')
-                 .end().find('[data-submenu]').removeAttr('aria-hidden tabindex role');
-    this.$submenuAnchors.each(function() {
-      $(this).off('.zf.drilldown');
-    });
+                 .end().find('[data-submenu]').removeAttr('aria-hidden tabindex role')
+                 .off('.zf.drilldown').end().off('zf.drilldown');
     this.$element.find('a').each(function(){
       var $link = $(this);
       if($link.data('savedHref')){
