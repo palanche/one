@@ -1,3 +1,71 @@
+opennebula (5.0.3-1) trusty; urgency=medium
+
+  [ Ruben S. Montero ]
+  * bug #4579: Add trigger for EPILOG_LOCAL event
+
+  [ Carlos Martín ]
+  * Bug #4580: Fix VM instantiate when NIC contains a fixed IP
+
+  [ Tino Vazquez ]
+  * Bug #4581: Fix for wrong attach disk
+
+  [ Ruben S. Montero ]
+  * bug #4582: Better checks for IPv4 strings
+  * Prevent deadlock when reservations fail with the same name.
+  * bug #4585: Fix PCI element in KVM deployment file
+  * bug #4587: Fixes issues when filtering context values
+
+  [ Carlos Martín ]
+  * Minor style tweaks
+  * Minor style adjustment in user & zone menus
+  * Bug #4578: Fill VM Template name in update wizard
+
+  [ Laurent Grawet ]
+  * Backlog #3953: "ceph df" XML output parsing for the monitor script (#103)
+
+  [ Carlos Martín ]
+  * Update translations
+
+  [ Ruben S. Montero ]
+  * bug #3953: Better ceph df parsing. Apply changes to Ceph System DS also
+
+  [ Anton Todorov ]
+  * fix for bug #4593 (#104)
+
+  [ Ruben S. Montero ]
+  * bug #4593: Moved history closing to the action, where the capacity is removed from the host. FAILURE states does not need update
+
+  [ Javi Fontan ]
+  * Use bash instead of sh to execute remote scripts
+
+  [ goberle ]
+  * POC: IPAM
+  * POC: IPAM
+
+  [ Ruben S. Montero ]
+  * bug #4447: Reduce the default cache size to reduce the memory requirements when big VMs (in terms of number of snapshots, history         records...) are used.
+
+  [ goberle ]
+  * POC: IPAM
+  * POC: IPAM
+
+  [ Javi Fontan ]
+  * Bump version to 5.0.1
+
+  [ goberle ]
+  * POC: IPAM
+  * POC: IPAM
+
+  [ Javi Fontan ]
+  * bug #4601: allow both old and new gzip mimetype
+
+  [ goberle ]
+  * Rebuild de l'UI web.
+
+  [ root ]
+
+ -- root <root@one-dev.unistra.fr>  Tue, 28 Jun 2016 09:30:09 +0200
+
 opennebula (5.0.2-1) trusty; urgency=medium
 
   [ Ruben S. Montero ]
