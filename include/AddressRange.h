@@ -74,7 +74,7 @@ public:
     // *************************************************************************
 
     /**
-     *  Return an AddressRangeOne or AddressRangeIPAM
+     *  Return an AddressRangeInternal or AddressRangeIPAM
      *    @param ipam_mad the driver name
      *    @next_ar id of the next address range
      *    @return the new address range
@@ -399,10 +399,10 @@ protected:
     string ip4_subnet_to_s(const unsigned int i_ip4_subnet[]) const;
 
     /**
-     *  Check IPv4 subnet
-     *    @param subnet in string form 192.168.0.0/24
+     *  Checks that address range fit in the IPv4 subnet
      */
     int check_ip4_subnet() const;
+    int check_ip4_subnet(unsigned int size) const;
 
     /**
      *  IP version 4 to binary (32 bits)
@@ -487,12 +487,40 @@ protected:
     int  attr_to_allocated(const string& allocated_s);
 
     /**
-     * TODO
+     * Get a free address 
+     * @param index the index
+     * @return 0 on success
      */
     virtual int get_free_addr(unsigned int &index) = 0;
+
+    /**
+     * Get a free address range
+     * @param index the index
+     * @param rsize the size of the range
+     * @return 0 on success
+     */
     virtual int get_free_addr_range(unsigned int &index, unsigned int rsize) = 0;
+
+    /**
+     * Register an address
+     * @param index the index
+     * @return 0 on success
+     */
     virtual int register_addr(unsigned int index) = 0;
+
+    /**
+     * Register an address range
+     * @param index the index
+     * @param rsize the size of the range
+     * @return 0 on success
+     */
     virtual int register_addr_range(unsigned int index, unsigned int rsize) = 0;
+
+    /**
+     * Free an address
+     * @param index the index
+     * @return 0 on success
+     */
     virtual int free_addr(unsigned int index) = 0;
 
     /**
