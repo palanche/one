@@ -14,8 +14,8 @@
 /* limitations under the License.                                             */
 /* -------------------------------------------------------------------------- */
 
-#ifndef ADDRESS_RANGE_ONE_H_
-#define ADDRESS_RANGE_ONE_H_
+#ifndef ADDRESS_RANGE_INTERNAL_H_
+#define ADDRESS_RANGE_INTERNAL_H_
 
 #include <string>
 #include <set>
@@ -32,13 +32,13 @@ class VectorAttribute;
 /**
  *  The Lease class represents an address lease from a Virtual Network.
  */
-class AddressRangeOne : public AddressRange 
+class AddressRangeInternal : public AddressRange 
 {
 public:
 
-    AddressRangeOne(string _ipam_mad, unsigned int _id):AddressRange(_ipam_mad, _id){};
+    AddressRangeInternal(string _ipam_mad, unsigned int _id):AddressRange(_ipam_mad, _id){};
 
-    virtual ~AddressRangeOne(){};
+    virtual ~AddressRangeInternal(){};
 
     /**
      *  Return the number of used addresses
@@ -51,10 +51,41 @@ public:
 
 private:
 
+    /**
+     * Get a free address from the IPAM
+     *   @param index the index
+     *   @return 0 on success
+     */
     int get_free_addr(unsigned int &index);
+
+    /**
+     * Get a free address range from the IPAM
+     *   @param index the index
+     *   @param rsize the size of the range
+     *   @return 0 on success
+     */
     int get_free_addr_range(unsigned int &index, unsigned int rsize);
+
+    /**
+     * Register an address
+     *   @param index the index
+     *   @return 0 on success
+     */
     int register_addr(unsigned int index);
+
+    /**
+     * Register an address range
+     *   @param index the index
+     *   @param rsize the size of the range
+     *   @return 0 on success
+     */
     int register_addr_range(unsigned int sindex, unsigned int rsize);
+
+    /**
+     * Free an address
+     *   @param index the index
+     *   @return 0 on success
+     */
     int free_addr(unsigned int index);
 
 };

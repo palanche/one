@@ -16,7 +16,7 @@
 
 #include "AddressRange.h"
 #include "AddressRangeIPAM.h"
-#include "AddressRangeOne.h"
+#include "AddressRangeInternal.h"
 #include "Attribute.h"
 #include "VirtualNetworkPool.h"
 #include "NebulaUtil.h"
@@ -74,9 +74,9 @@ AddressRange::AddressType AddressRange::str_to_type(string& str_type)
 
 AddressRange * AddressRange::new_ar_by_type(string ipam_mad, unsigned int next_ar)
 {
-    if ( ipam_mad.empty() || ipam_mad == "default" )
+    if ( ipam_mad.empty() || ipam_mad == "internal" )
     {
-        return new AddressRangeOne("default", next_ar);
+        return new AddressRangeInternal("internal", next_ar);
     }
 
     return new AddressRangeIPAM(ipam_mad, next_ar);
@@ -102,7 +102,14 @@ int AddressRange::from_vattr(VectorAttribute *vattr, string& error_msg)
 
     attr = vattr;
 
-    /* ------------------------- AR Type & Size ---------------------------- */
+    /* --------------------- IPAM_MAD, AR Type & Size ----------------------- */
+
+    value = vattr->vector_value("IPAM_MAD");
+
+    if (value.empty())
+    {
+        vattr->replace("IPAM_MAD", "internal");
+    }
 
     value = vattr->vector_value("TYPE");
     type  = str_to_type(value);
@@ -263,6 +270,15 @@ int AddressRange::update_attributes(
 
     /* --------------- Copy non-update attributes ----------------- */
 
+    string _ipam_mad = attr->vector_value("IPAM_MAD");
+
+    if (_ipam_mad.empty())
+    {
+        _ipam_mad = "internal";
+    }
+
+    vup->replace("IPAM_MAD", _ipam_mad);
+
     vup->replace("TYPE", attr->vector_value("TYPE"));
 
     vup->replace("MAC", attr->vector_value("MAC"));
@@ -337,6 +353,12 @@ int AddressRange::update_attributes(
             error_msg = "New SIZE cannot be applied. There are used leases"
                     " that would fall outside the range.";
 
+            return -1;
+        }
+        
+        if (check_ip4_subnet(new_size) == -1)
+        {
+            error_msg = "The new SIZE does not fit in the IP4_SUBNET.";
             return -1;
         }
 
@@ -736,6 +758,25 @@ int AddressRange::check_ip4_subnet() const
     return 0;
 }
 
+int AddressRange::check_ip4_subnet(unsigned int new_size) const
+{
+    unsigned int maskb = 0;
+    if (ip4_subnet[1] != 0)
+    {
+      maskb = (0xFFFFFFFF << (32 - ip4_subnet[1])) & 0xFFFFFFFF;
+    }
+
+    unsigned int ip_start = ip4_subnet[0] & maskb;
+    unsigned int ip_end = ip4_subnet[0] | (~maskb);
+
+    if ( ip < ip_start || (ip + new_size) > ip_end )
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 
@@ -747,6 +788,11 @@ int AddressRange::ip_to_i(const string& _ip, unsigned int& i_ip) const
     unsigned int  tmp;
 
     string ip = _ip;
+
+    if ( ip.find_first_not_of("0123456789.") != std::string::npos )
+    {
+        return -1;
+    }
 
     while ( (pos = ip.find('.')) !=  string::npos )
     {
@@ -767,7 +813,7 @@ int AddressRange::ip_to_i(const string& _ip, unsigned int& i_ip) const
     {
         iss >> dec >> tmp >> ws;
 
-        if ( tmp > 255 )
+        if ( tmp > 255 || iss.fail() )
         {
             return -1;
         }
@@ -1455,7 +1501,7 @@ void AddressRange::reserve_addr_range(int vid, unsigned int rsize,
 
     rar->from_vattr(new_ar, errmsg);
 
-    new_ar->replace("IPAM_MAD", "default");
+    new_ar->replace("IPAM_MAD", "internal");
 
     new_ar->replace("PARENT_NETWORK_AR_ID", id);
 }
