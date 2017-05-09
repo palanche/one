@@ -25,8 +25,8 @@
 /* The first 100 IDs are reserved. Regular ones start from ID 100             */
 /* -------------------------------------------------------------------------- */
 
-const string VirtualNetworkStorePool::SYSTEM_VNS_NAME = "default";
-const int    VirtualNetworkStorePool::SYSTEM_VNS_ID   = 0;
+const string VirtualNetworkStorePool::DEFAULT_VNS_NAME = "default";
+const int    VirtualNetworkStorePool::DEFAULT_VNS_ID   = 0;
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */

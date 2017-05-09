@@ -30,6 +30,30 @@ class VirtualNetworkStore : public PoolObjectSQL, public Clusterable
 {
 public:
     /**
+     *  VirtualNetworkStore State
+     */
+    enum VirtualNetworkStoreState
+    {
+        READY     = 0, /** < VirtualNetwork ready to use */
+        DISABLED  = 1  /** < VirtualNetworkStore can not be used */
+    };
+
+    /**
+     * Returns the string representation of a VirtualNetworkStoreState
+     * @param state The state
+     * @return the string representation
+     */
+    static string state_to_str(VirtualNetworkStoreState state)
+    {
+        switch(state)
+        {
+            case READY:     return "READY";     break;
+            case DISABLED:  return "DISABLED";  break;
+            default:        return "";
+        }
+    };
+
+    /**
      * Function to print the VirtualNetworkStore object into a string in XML
      * format
      *  @param xml the resulting XML string

@@ -313,6 +313,7 @@ void Nebula::start(bool bootstrap_only)
 
             rc += VirtualMachinePool::bootstrap(db);
             rc += HostPool::bootstrap(db);
+            rc += VirtualNetworkStorePool::bootstrap(db);
             rc += VirtualNetworkPool::bootstrap(db);
             rc += ImagePool::bootstrap(db);
             rc += VMTemplatePool::bootstrap(db);
@@ -504,6 +505,15 @@ void Nebula::start(bool bootstrap_only)
 
         hpool  = new HostPool(db, host_hooks, hook_location, remotes_location,
             host_expiration);
+
+
+        /* -------------------- VirtualnetworkStore Pool -------------------- */
+        vector<const SingleAttribute *> inherit_vns_attrs;
+
+        nebula_configuration->get("INHERIT_VIRTUALNETWORKSTORE_ATTR",
+        inherit_vns_attrs);
+
+        vnspool = new VirtualNetworkStorePool(db, inherit_vns_attrs);
 
         /* --------------------- VirtualRouter Pool ------------------------- */
         vector<const VectorAttribute *> vrouter_hooks;
@@ -1143,4 +1153,3 @@ int Nebula::get_conf_attribute(
     value = 0;
     return -1;
 };
-

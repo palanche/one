@@ -143,6 +143,11 @@ private:
     void set_conf_single(const std::string& attr, const std::string& value);
 
     /**
+     *  Sets a the efaults for a VN
+     */
+    void set_conf_vn(const std::string& name);
+
+    /**
      *  Sets a the defaults for a DS
      */
     void set_conf_ds(const std::string& name,

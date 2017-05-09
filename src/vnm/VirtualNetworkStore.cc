@@ -47,9 +47,9 @@ VirtualNetworkStore::VirtualNetworkStore(
             state(READY),
             virtual_networks("VIRTUALNETWORKS")
 {
-    if (ds_template != 0)
+    if (vns_template != 0)
     {
-        obj_template = ds_template;
+        obj_template = vns_template;
     }
     else
     {

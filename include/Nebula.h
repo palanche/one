@@ -23,6 +23,7 @@
 #include "NebulaTemplate.h"
 
 #include "VirtualMachinePool.h"
+#include "VirtualNetworkStorePool.h"
 #include "VirtualNetworkPool.h"
 #include "HostPool.h"
 #include "UserPool.h"
@@ -86,6 +87,11 @@ public:
     {
         return hpool;
     };
+
+    VirtualNetworkStorePool * get_vnspool()
+    {
+        return vnspool;
+    }
 
     VirtualNetworkPool * get_vnpool()
     {
@@ -670,11 +676,7 @@ private:
                             "/DEFAULT_GROUP_QUOTAS/IMAGE_QUOTA",
                             "/DEFAULT_GROUP_QUOTAS/VM_QUOTA"),
         system_db(0), db(0),
-        vmpool(0), hpool(0), vnpool(0), upool(0), ipool(0), gpool(0), tpool(0),
-        dspool(0), clpool(0), docpool(0), zonepool(0), secgrouppool(0),
-        vdcpool(0), vrouterpool(0), marketpool(0), apppool(0), vmgrouppool(0),
-        lcm(0), vmm(0), im(0), tm(0), dm(0), rm(0), hm(0), authm(0), aclm(0),
-        imagem(0), marketm(0), ipamm(0)
+        vmpool(0), hpool(0), vnspool(0), vnpool(0), upool(0), ipool(0), gpool(0), tpool(0), dspool(0), clpool(0), docpool(0), zonepool(0), secgrouppool(0), vdcpool(0), vrouterpool(0), marketpool(0), apppool(0), vmgrouppool(0), lcm(0), vmm(0), im(0), tm(0), dm(0), rm(0), hm(0), authm(0), aclm(0), imagem(0), marketm(0), ipamm(0)
     {
         const char * nl = getenv("ONE_LOCATION");
 
@@ -710,6 +712,7 @@ private:
     ~Nebula()
     {
         delete vmpool;
+        delete vnspool;
         delete vnpool;
         delete hpool;
         delete upool;
@@ -793,24 +796,25 @@ private:
     // Nebula Pools
     // ---------------------------------------------------------------
 
-    SqlDB              * db;
-    VirtualMachinePool * vmpool;
-    HostPool           * hpool;
-    VirtualNetworkPool * vnpool;
-    UserPool           * upool;
-    ImagePool          * ipool;
-    GroupPool          * gpool;
-    VMTemplatePool     * tpool;
-    DatastorePool      * dspool;
-    ClusterPool        * clpool;
-    DocumentPool       * docpool;
-    ZonePool           * zonepool;
-    SecurityGroupPool  * secgrouppool;
-    VdcPool            * vdcpool;
-    VirtualRouterPool  * vrouterpool;
-    MarketPlacePool    * marketpool;
-    MarketPlaceAppPool * apppool;
-    VMGroupPool        * vmgrouppool;
+    SqlDB                   * db;
+    VirtualMachinePool      * vmpool;
+    HostPool                * hpool;
+    VirtualNetworkStorePool * vnspool;
+    VirtualNetworkPool      * vnpool;
+    UserPool                * upool;
+    ImagePool               * ipool;
+    GroupPool               * gpool;
+    VMTemplatePool          * tpool;
+    DatastorePool           * dspool;
+    ClusterPool             * clpool;
+    DocumentPool            * docpool;
+    ZonePool                * zonepool;
+    SecurityGroupPool       * secgrouppool;
+    VdcPool                 * vdcpool;
+    VirtualRouterPool       * vrouterpool;
+    MarketPlacePool         * marketpool;
+    MarketPlaceAppPool      * apppool;
+    VMGroupPool             * vmgrouppool;
 
     // ---------------------------------------------------------------
     // Nebula Managers
