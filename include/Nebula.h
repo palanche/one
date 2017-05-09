@@ -488,6 +488,15 @@ public:
     }
 
     /**
+     *  Gets a VN configuration attribute
+     */
+     int get_vn_conf_attribute(const std::string& vn_name,
+         const VectorAttribute* &value) const
+     {
+         return get_conf_attribute("VN_MAD_CONF", vn_name, value);
+     };
+
+    /**
      *  Gets a DS configuration attribute
      */
     int get_ds_conf_attribute(const std::string& ds_name,

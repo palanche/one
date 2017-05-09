@@ -110,6 +110,26 @@ void OpenNebulaTemplate::set_multiple_conf_default()
 {
 /*
 #*******************************************************************************
+# Virtual Network Manager Configuration
+#*******************************************************************************
+# dummy
+# 802.1Q
+# vxlan
+# ebtables
+# ovswitch
+# vcenter
+#*******************************************************************************
+*/
+    set_conf_vn("dummy");
+    set_conf_vn("802.1Q");
+    set_conf_vn("vxlan");
+    set_conf_vn("ebtables");
+    set_conf_vn("ovswitch");
+    set_conf_vn("vcenter");
+
+    register_multiple_conf_default("VN_MAD_CONF");
+/*
+#*******************************************************************************
 # Transfer Manager Configuration
 #*******************************************************************************
 # dummy
@@ -275,6 +295,20 @@ void OpenNebulaTemplate::set_conf_single(const std::string& attr,
 
     attribute = new SingleAttribute(attr, value);
     conf_default.insert(make_pair(attribute->name(),attribute));
+}
+
+/* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+
+void OpenNebulaTemplate::set_conf_vn(const std::string& name)
+{
+    VectorAttribute *   vattribute;
+    std::map<std::string,std::string>  vvalue;
+
+    vvalue.insert(make_pair("NAME", name));
+
+    vattribute = new VectorAttribute("VN_MAD_CONF", vvalue);
+    conf_default.insert(make_pair(vattribute->name(), vattribute));
 }
 
 /* -------------------------------------------------------------------------- */
